@@ -9,12 +9,24 @@ import {
 } from "@tanstack/react-router";
 import { Suspense, lazy } from "react";
 import AdminLayout from "./components/admin/AdminLayout";
+import StudentLayout from "./components/student/StudentLayout";
+import { loadSession } from "./lib/auth";
 
 // ─── Lazy Pages ───────────────────────────────────────────────────────────────
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics"));
 const MockInterview = lazy(() => import("./pages/admin/MockInterview"));
 const ResumeEditor = lazy(() => import("./pages/admin/ResumeEditor"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const StudentDashboard = lazy(() => import("./pages/student/StudentDashboard"));
+const StudentProfile = lazy(() => import("./pages/student/StudentProfile"));
+const StudentApplications = lazy(
+  () => import("./pages/student/StudentApplications"),
+);
+const StudentInterviewPrep = lazy(
+  () => import("./pages/student/StudentInterviewPrep"),
+);
+const StudentAnalytics = lazy(() => import("./pages/student/StudentAnalytics"));
 
 function PlaceholderPage({ title }: { title: string }) {
   return (
@@ -46,15 +58,36 @@ const rootRoute = createRootRoute({
   component: () => <Outlet />,
   beforeLoad: ({ location }) => {
     if (location.pathname === "/") {
-      throw redirect({ to: "/admin/dashboard" });
+      const session = loadSession();
+      if (session) {
+        throw redirect({
+          to:
+            session.role === "admin"
+              ? "/admin/dashboard"
+              : "/student/dashboard",
+        });
+      }
+      throw redirect({ to: "/login" });
     }
   },
+});
+
+const loginRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/login",
+  component: withSuspense(LoginPage),
 });
 
 const adminRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/admin",
   component: AdminLayout,
+  beforeLoad: () => {
+    const session = loadSession();
+    if (!session || session.role !== "admin") {
+      throw redirect({ to: "/login" });
+    }
+  },
 });
 
 const adminIndexRoute = createRoute({
@@ -111,8 +144,70 @@ const settingsRoute = createRoute({
   component: () => <PlaceholderPage title="Settings" />,
 });
 
+// ─── Student Routes ───────────────────────────────────────────────────────────
+const studentRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/student",
+  component: StudentLayout,
+  beforeLoad: () => {
+    const session = loadSession();
+    if (!session || session.role !== "student") {
+      throw redirect({ to: "/login" });
+    }
+  },
+});
+
+const studentIndexRoute = createRoute({
+  getParentRoute: () => studentRoute,
+  path: "/",
+  component: () => <Navigate to="/student/dashboard" />,
+});
+
+const studentDashboardRoute = createRoute({
+  getParentRoute: () => studentRoute,
+  path: "dashboard",
+  component: withSuspense(StudentDashboard),
+});
+
+const studentProfileRoute = createRoute({
+  getParentRoute: () => studentRoute,
+  path: "profile",
+  component: withSuspense(StudentProfile),
+});
+
+const studentApplicationsRoute = createRoute({
+  getParentRoute: () => studentRoute,
+  path: "applications",
+  component: withSuspense(StudentApplications),
+});
+
+const studentInterviewPrepRoute = createRoute({
+  getParentRoute: () => studentRoute,
+  path: "interview-prep",
+  component: withSuspense(StudentInterviewPrep),
+});
+
+const studentAnalyticsRoute = createRoute({
+  getParentRoute: () => studentRoute,
+  path: "analytics",
+  component: withSuspense(StudentAnalytics),
+});
+
+const studentResumeRoute = createRoute({
+  getParentRoute: () => studentRoute,
+  path: "resume",
+  component: withSuspense(ResumeEditor),
+});
+
+const studentMockInterviewRoute = createRoute({
+  getParentRoute: () => studentRoute,
+  path: "mock-interview",
+  component: withSuspense(MockInterview),
+});
+
 // ─── Router ───────────────────────────────────────────────────────────────────
 const routeTree = rootRoute.addChildren([
+  loginRoute,
   adminRoute.addChildren([
     adminIndexRoute,
     dashboardRoute,
@@ -123,6 +218,16 @@ const routeTree = rootRoute.addChildren([
     studentsRoute,
     companiesRoute,
     settingsRoute,
+  ]),
+  studentRoute.addChildren([
+    studentIndexRoute,
+    studentDashboardRoute,
+    studentProfileRoute,
+    studentApplicationsRoute,
+    studentInterviewPrepRoute,
+    studentAnalyticsRoute,
+    studentResumeRoute,
+    studentMockInterviewRoute,
   ]),
 ]);
 

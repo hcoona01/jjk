@@ -1,10 +1,11 @@
-# Design Brief — Nexus Admin War Room
+# Design Brief — Nexus Student Dashboard & Admin War Room
 
 ## Overview
-Command center dashboard for placement analytics. Dark-mode first, high-contrast blue accents. Every pixel serves data clarity. No decoration.
+Dual-dashboard system: Admin war room for placement operations, student dashboard for personal placement journey tracking. Dark-mode first, consistent blue OKLCH accents. Every pixel serves clarity — tactical on admin side, aspirational on student side.
 
 ## Tone & Aesthetic
-Authoritative tactical interface. Information-forward, zero ornamentation. Designed for rapid decision-making at 2 AM during placement season.
+**Admin**: Authoritative tactical interface. Information-forward, zero ornamentation. Designed for rapid decision-making during placement season.
+**Student**: Personal achievement tracker. Warm elevation, micro-interactions reward progress. Placement readiness focus — from application pipeline to interview performance to offer tracking.
 
 ## Color Palette
 
@@ -33,11 +34,12 @@ Authoritative tactical interface. Information-forward, zero ornamentation. Desig
 
 | Zone | Surface | Border | Purpose |
 |------|---------|--------|---------|
-| Header | `bg-card` | `border-b border-border` | Top chrome (breadcrumb, filters) |
-| Sidebar | `bg-sidebar` | `border-r border-sidebar-border` | Navigation, persistent context |
-| Content | `bg-background` | None | KPI cards, charts, tables |
-| Cards | `bg-card` | `border border-border` | Contained metrics, charts, forms |
-| Tables | `font-mono text-sm` | `border-collapse` | Department/company analytics |
+| Header | `bg-card` | `border-b border-border` | Top chrome (breadcrumb, filters, user menu) |
+| Sidebar | `bg-sidebar` | `border-r border-sidebar-border` | Navigation (6 items for students: Dashboard, Profile, Applications, Interview Prep, Analytics, Resume Builder) |
+| Content | `bg-background` | None | KPI cards, charts, tables, forms |
+| Cards | `bg-card` | `border border-border` | Metrics, charts, application pipeline, interview history |
+| Tables | `font-mono text-sm` | `border-collapse` | Application list, interview schedule, company comparison |
+| Student Zones | `bg-muted/30` | `border-b border-border` | Skill audit, placement progress, upcoming interviews |
 
 ## Component Patterns
 
@@ -56,6 +58,12 @@ Authoritative tactical interface. Information-forward, zero ornamentation. Desig
 
 ### Data Tables
 - Class: `.data-table` — monospace font, compact line-height, striped rows (`bg-muted/30` alternating)
+
+### Student-Specific Components
+- **Placement Readiness Score**: Circular progress indicator (0–100%) with placement status tooltip
+- **Application Pipeline**: Horizontal funnel (Applied → Shortlisted → Interviewed → Offered)
+- **Interview History**: List view with pass/fail badges, feedback snippets, retake options
+- **Skills Audit**: Skill tags with proficiency badges (Intermediate, Advanced, Expert)
 
 ## Motion & Interaction
 
@@ -79,4 +87,5 @@ Authoritative tactical interface. Information-forward, zero ornamentation. Desig
 - No animations beyond status transitions and counter increments
 
 ## Differentiation
-Placement war room that reads like ops dashboard — every department, batch, company, skill gap visible in one glance. Color-coded success rates beat generic tables. Trend lines show week-over-week momentum. At-risk predictions surface before placements happen.
+**Admin War Room**: Operations dashboard — every department, batch, company, skill gap visible in one glance. Color-coded success rates. Trend lines show momentum. At-risk predictions surface early.
+**Student Dashboard**: Personal placement companion — application status, interview performance, skill gaps, offer tracking. Progress rewarded with visual feedback. Analytics drill-down into personal metrics (not department-wide).

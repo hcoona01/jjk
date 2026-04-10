@@ -52,6 +52,8 @@ export interface Application {
   date: string;
   role: string;
   package_offered?: number;
+  interview_date?: string;
+  notes?: string;
 }
 
 export interface JobPosting {
@@ -162,4 +164,64 @@ export interface FilterState {
   dateRange: DateRange;
   customStart?: string;
   customEnd?: string;
+}
+
+// ─── Interview & Student Analytics Types ─────────────────────────────────────
+
+export interface InterviewSession {
+  id: string;
+  student_id: string;
+  company: string;
+  role: string;
+  date: string;
+  type: "technical" | "hr" | "aptitude" | "group-discussion" | "mock";
+  score: number; // 0-100
+  duration_minutes: number;
+  questions_answered: number;
+  questions_total: number;
+  feedback?: string;
+  status: "scheduled" | "completed" | "cancelled";
+  round: number;
+}
+
+export interface PeerBenchmark {
+  student_cgpa: number;
+  dept_avg_cgpa: number;
+  dept_cgpa_percentile: number;
+  student_aptitude: number;
+  dept_avg_aptitude: number;
+  dept_aptitude_percentile: number;
+  student_programming: number;
+  dept_avg_programming: number;
+  dept_programming_percentile: number;
+  student_package?: number;
+  dept_avg_package?: number;
+  dept_package_percentile?: number;
+  dept_placement_rate: number;
+  batch_size: number;
+}
+
+export interface StudentStats {
+  total_applications: number;
+  applications_by_status: Record<ApplicationStatus, number>;
+  cgpa_percentile: number;
+  upcoming_interview_count: number;
+  skill_count: number;
+  avg_package_dept: number;
+  top_company_applied?: string;
+  interview_sessions: InterviewSession[];
+  peer_benchmark: PeerBenchmark;
+}
+
+export interface UpcomingDrive {
+  id: string;
+  company_id: string;
+  company_name: string;
+  date: string;
+  tier: CompanyTier;
+  roles: string[];
+  min_cgpa: number;
+  package_range: string;
+  eligible_branches: Department[];
+  positions: number;
 }

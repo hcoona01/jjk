@@ -1,5 +1,11 @@
+import { clearSession, loadSession } from "@/lib/auth";
 import { cn } from "@/lib/utils";
-import { Link, Outlet, useRouterState } from "@tanstack/react-router";
+import {
+  Link,
+  Outlet,
+  useNavigate,
+  useRouterState,
+} from "@tanstack/react-router";
 import {
   BarChart3,
   Building2,
@@ -7,6 +13,7 @@ import {
   Cpu,
   FileText,
   LayoutDashboard,
+  LogOut,
   MessageSquare,
   Settings,
   Users,
@@ -79,6 +86,13 @@ function SidebarLink({ item, isActive }: { item: NavItem; isActive: boolean }) {
 export default function AdminLayout() {
   const routerState = useRouterState();
   const currentPath = routerState.location.pathname;
+  const navigate = useNavigate();
+  const session = loadSession();
+
+  function handleLogout() {
+    clearSession();
+    void navigate({ to: "/login" });
+  }
 
   // Group nav items by section
   const sections: { title?: string; items: NavItem[] }[] = [
@@ -148,8 +162,29 @@ export default function AdminLayout() {
         </nav>
 
         {/* Footer */}
-        <div className="px-4 py-3 border-t border-border">
-          <p className="text-[10px] text-muted-foreground/50 text-center">
+        <div className="px-3 py-3 border-t border-border space-y-2">
+          {/* User info */}
+          {session && (
+            <div className="px-2 py-1.5 rounded-lg bg-muted/50">
+              <p className="text-xs font-medium text-foreground truncate">
+                {session.name}
+              </p>
+              <p className="text-[10px] text-muted-foreground truncate">
+                {session.email ?? "Admin"}
+              </p>
+            </div>
+          )}
+          {/* Logout */}
+          <button
+            type="button"
+            data-ocid="btn-logout"
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-smooth"
+          >
+            <LogOut size={16} className="flex-shrink-0" />
+            <span>Log out</span>
+          </button>
+          <p className="text-[10px] text-muted-foreground/50 text-center px-1">
             © {new Date().getFullYear()} Nexus.{" "}
             <a
               href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(typeof window !== "undefined" ? window.location.hostname : "")}`}

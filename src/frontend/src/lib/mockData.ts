@@ -6,15 +6,18 @@ import type {
   CompanyTier,
   Department,
   DeptStats,
+  InterviewSession,
   JobPosting,
   MonthlyTrend,
   PackageDistribution,
+  PeerBenchmark,
   PipelineStage,
   PlacementDrive,
   Referral,
   School,
   SkillGap,
   Student,
+  UpcomingDrive,
 } from "../types/placement";
 
 // ─── Students ────────────────────────────────────────────────────────────────
@@ -223,7 +226,63 @@ function generateStudents(): Student[] {
   return students;
 }
 
-export const mockStudents: Student[] = generateStudents();
+// ─── Hardcoded Demo Students (always present, easy roll numbers) ──────────────
+const demoStudents: Student[] = [
+  {
+    id: "DEMO001",
+    name: "Arjun Sharma",
+    department: "CSE",
+    school: "SCOPE",
+    programme: "B.Tech",
+    batch: 2021,
+    section: "K21EA",
+    cgpa: 8.7,
+    aptitude_score: 85,
+    programming_score: 90,
+    placement_status: "placed",
+    skills: ["React", "Node.js", "Python", "TypeScript"],
+    placed_at: "Google",
+    package_lpa: 28.5,
+    email: "arjun.sharma.demo@vit.ac.in",
+    roll_number: "DEMO001",
+  },
+  {
+    id: "DEMO002",
+    name: "Priya Patel",
+    department: "AI-ML",
+    school: "SCOPE",
+    programme: "B.Tech",
+    batch: 2022,
+    section: "K21EB",
+    cgpa: 9.1,
+    aptitude_score: 92,
+    programming_score: 88,
+    placement_status: "placed",
+    skills: ["Python", "TensorFlow", "PyTorch", "NLP"],
+    placed_at: "Microsoft",
+    package_lpa: 22.0,
+    email: "priya.patel.demo@vit.ac.in",
+    roll_number: "DEMO002",
+  },
+  {
+    id: "DEMO003",
+    name: "Rohan Kumar",
+    department: "IT",
+    school: "SCOPE",
+    programme: "B.Tech",
+    batch: 2021,
+    section: "K21EC",
+    cgpa: 7.8,
+    aptitude_score: 78,
+    programming_score: 82,
+    placement_status: "in-progress",
+    skills: ["Python", "Django", "SQL", "Azure"],
+    email: "rohan.kumar.demo@vit.ac.in",
+    roll_number: "DEMO003",
+  },
+];
+
+export const mockStudents: Student[] = [...demoStudents, ...generateStudents()];
 
 // ─── Companies ───────────────────────────────────────────────────────────────
 
@@ -475,7 +534,7 @@ const ROLES = [
 
 function randomDate(daysBack: number): string {
   const d = new Date();
-  d.setDate(d.getDate() - rand(0, daysBack));
+  d.setDate(d.getDate() - daysBack);
   return d.toISOString().split("T")[0];
 }
 
@@ -500,7 +559,7 @@ export const mockApplications: Application[] = Array.from(
       student_id: student.id,
       company_id: company.id,
       status,
-      date: randomDate(180),
+      date: randomDate(rand(1, 180)),
       role: pick(ROLES),
       package_offered:
         status === "offered" || status === "hired"
@@ -509,6 +568,274 @@ export const mockApplications: Application[] = Array.from(
     };
   },
 );
+
+// ─── Demo student specific applications ───────────────────────────────────────
+const demoApplicationsBase: Application[] = [
+  {
+    id: "APP_D001",
+    student_id: "DEMO001",
+    company_id: "C001",
+    status: "hired",
+    date: randomDate(45),
+    role: "Software Engineer",
+    package_offered: 28.5,
+  },
+  {
+    id: "APP_D002",
+    student_id: "DEMO001",
+    company_id: "C002",
+    status: "offered",
+    date: randomDate(60),
+    role: "Full Stack Developer",
+    package_offered: 22.0,
+  },
+  {
+    id: "APP_D003",
+    student_id: "DEMO001",
+    company_id: "C005",
+    status: "interviewing",
+    date: randomDate(20),
+    role: "ML Engineer",
+    interview_date: randomDate(-7),
+  },
+  {
+    id: "APP_D004",
+    student_id: "DEMO001",
+    company_id: "C003",
+    status: "shortlisted",
+    date: randomDate(15),
+    role: "Software Engineer",
+  },
+  {
+    id: "APP_D005",
+    student_id: "DEMO001",
+    company_id: "C006",
+    status: "rejected",
+    date: randomDate(90),
+    role: "Software Engineer",
+  },
+  // DEMO002
+  {
+    id: "APP_D006",
+    student_id: "DEMO002",
+    company_id: "C002",
+    status: "hired",
+    date: randomDate(30),
+    role: "ML Engineer",
+    package_offered: 22.0,
+  },
+  {
+    id: "APP_D007",
+    student_id: "DEMO002",
+    company_id: "C005",
+    status: "offered",
+    date: randomDate(40),
+    role: "Research Analyst",
+    package_offered: 35.0,
+  },
+  {
+    id: "APP_D008",
+    student_id: "DEMO002",
+    company_id: "C015",
+    status: "shortlisted",
+    date: randomDate(10),
+    role: "Data Engineer",
+  },
+  {
+    id: "APP_D009",
+    student_id: "DEMO002",
+    company_id: "C001",
+    status: "interviewing",
+    date: randomDate(5),
+    role: "ML Engineer",
+    interview_date: randomDate(-3),
+  },
+  // DEMO003
+  {
+    id: "APP_D010",
+    student_id: "DEMO003",
+    company_id: "C008",
+    status: "applied",
+    date: randomDate(7),
+    role: "Full Stack Developer",
+  },
+  {
+    id: "APP_D011",
+    student_id: "DEMO003",
+    company_id: "C009",
+    status: "shortlisted",
+    date: randomDate(14),
+    role: "Systems Engineer",
+  },
+  {
+    id: "APP_D012",
+    student_id: "DEMO003",
+    company_id: "C010",
+    status: "interviewing",
+    date: randomDate(21),
+    role: "DevOps Engineer",
+    interview_date: randomDate(-5),
+  },
+  {
+    id: "APP_D013",
+    student_id: "DEMO003",
+    company_id: "C007",
+    status: "rejected",
+    date: randomDate(50),
+    role: "Software Engineer",
+  },
+];
+
+// Merge demo applications at the front so they're always present
+export const mockApplicationsAll: Application[] = [
+  ...demoApplicationsBase,
+  ...mockApplications,
+];
+
+// ─── Interview Sessions ────────────────────────────────────────────────────────
+
+const INTERVIEW_FEEDBACK = [
+  "Strong problem-solving skills, needs improvement in system design.",
+  "Excellent communication, coding could be faster.",
+  "Good domain knowledge, work on behavioral questions.",
+  "Impressive portfolio, strengthen DSA fundamentals.",
+  "Team player, needs to articulate technical decisions better.",
+];
+
+export const mockInterviewSessions: InterviewSession[] = [
+  // DEMO001
+  {
+    id: "INT_D001",
+    student_id: "DEMO001",
+    company: "Google",
+    role: "Software Engineer",
+    date: randomDate(44),
+    type: "technical",
+    score: 88,
+    duration_minutes: 60,
+    questions_answered: 4,
+    questions_total: 4,
+    feedback: "Excellent DSA solutions. Impress with system design approach.",
+    status: "completed",
+    round: 2,
+  },
+  {
+    id: "INT_D002",
+    student_id: "DEMO001",
+    company: "Google",
+    role: "Software Engineer",
+    date: randomDate(46),
+    type: "hr",
+    score: 92,
+    duration_minutes: 45,
+    questions_answered: 8,
+    questions_total: 8,
+    feedback: "Strong cultural fit. Articulates goals clearly.",
+    status: "completed",
+    round: 3,
+  },
+  {
+    id: "INT_D003",
+    student_id: "DEMO001",
+    company: "OpenAI",
+    role: "ML Engineer",
+    date: randomDate(-7),
+    type: "technical",
+    score: 0,
+    duration_minutes: 90,
+    questions_answered: 0,
+    questions_total: 5,
+    feedback: undefined,
+    status: "scheduled",
+    round: 1,
+  },
+  // DEMO002
+  {
+    id: "INT_D004",
+    student_id: "DEMO002",
+    company: "Microsoft",
+    role: "ML Engineer",
+    date: randomDate(29),
+    type: "technical",
+    score: 91,
+    duration_minutes: 75,
+    questions_answered: 5,
+    questions_total: 5,
+    feedback: "Outstanding ML knowledge. Would be a strong hire.",
+    status: "completed",
+    round: 2,
+  },
+  {
+    id: "INT_D005",
+    student_id: "DEMO002",
+    company: "Google",
+    role: "ML Engineer",
+    date: randomDate(-3),
+    type: "technical",
+    score: 0,
+    duration_minutes: 60,
+    questions_answered: 0,
+    questions_total: 4,
+    feedback: undefined,
+    status: "scheduled",
+    round: 1,
+  },
+  // DEMO003
+  {
+    id: "INT_D006",
+    student_id: "DEMO003",
+    company: "HCL Technologies",
+    role: "DevOps Engineer",
+    date: randomDate(-5),
+    type: "technical",
+    score: 0,
+    duration_minutes: 60,
+    questions_answered: 0,
+    questions_total: 4,
+    feedback: undefined,
+    status: "scheduled",
+    round: 1,
+  },
+  {
+    id: "INT_D007",
+    student_id: "DEMO003",
+    company: "Wipro",
+    role: "Full Stack Developer",
+    date: randomDate(20),
+    type: "aptitude",
+    score: 74,
+    duration_minutes: 30,
+    questions_answered: 20,
+    questions_total: 25,
+    feedback: "Good aptitude score. Work on speed.",
+    status: "completed",
+    round: 1,
+  },
+  // generic sessions for other students
+  ...Array.from({ length: 30 }, (_, i) => {
+    const student = mockStudents[i + 3];
+    return {
+      id: `INT_G${String(i + 1).padStart(3, "0")}`,
+      student_id: student.id,
+      company: pick(mockCompanies).name,
+      role: pick(ROLES),
+      date: randomDate(rand(1, 60)),
+      type: pick([
+        "technical",
+        "hr",
+        "aptitude",
+        "mock",
+      ] as InterviewSession["type"][]),
+      score: rand(50, 95),
+      duration_minutes: rand(30, 90),
+      questions_answered: rand(3, 8),
+      questions_total: rand(4, 10),
+      feedback: pick(INTERVIEW_FEEDBACK),
+      status: "completed" as InterviewSession["status"],
+      round: rand(1, 3),
+    };
+  }),
+];
 
 // ─── Job Postings ─────────────────────────────────────────────────────────────
 
@@ -558,6 +885,83 @@ export const mockPlacementDrives: PlacementDrive[] = mockCompanies
     tier: c.tier as CompanyTier,
   }));
 
+// ─── Upcoming Drives (student-facing) ─────────────────────────────────────────
+
+export const mockUpcomingDrives: UpcomingDrive[] = [
+  {
+    id: "UD001",
+    company_id: "C001",
+    company_name: "Google",
+    date: randomDate(-14),
+    tier: 1,
+    roles: ["Software Engineer", "Full Stack Developer"],
+    min_cgpa: 7.5,
+    package_range: "25-45 LPA",
+    eligible_branches: ["CSE", "AI-ML"],
+    positions: 8,
+  },
+  {
+    id: "UD002",
+    company_id: "C002",
+    company_name: "Microsoft",
+    date: randomDate(-21),
+    tier: 1,
+    roles: ["ML Engineer", "Data Engineer"],
+    min_cgpa: 7.0,
+    package_range: "20-38 LPA",
+    eligible_branches: ["CSE", "IT", "AI-ML"],
+    positions: 10,
+  },
+  {
+    id: "UD003",
+    company_id: "C005",
+    company_name: "OpenAI",
+    date: randomDate(-28),
+    tier: 1,
+    roles: ["Research Analyst", "ML Engineer"],
+    min_cgpa: 8.0,
+    package_range: "30-60 LPA",
+    eligible_branches: ["AI-ML", "CSE"],
+    positions: 4,
+  },
+  {
+    id: "UD004",
+    company_id: "C015",
+    company_name: "Fractal Analytics",
+    date: randomDate(-10),
+    tier: 2,
+    roles: ["Data Analyst", "Product Analyst"],
+    min_cgpa: 6.5,
+    package_range: "10-18 LPA",
+    eligible_branches: ["AI-ML", "CSE", "IT"],
+    positions: 10,
+  },
+  {
+    id: "UD005",
+    company_id: "C003",
+    company_name: "Amazon",
+    date: randomDate(-35),
+    tier: 1,
+    roles: ["Software Development Engineer", "Site Reliability Engineer"],
+    min_cgpa: 7.0,
+    package_range: "18-32 LPA",
+    eligible_branches: ["CSE", "IT"],
+    positions: 12,
+  },
+  {
+    id: "UD006",
+    company_id: "C006",
+    company_name: "Infosys",
+    date: randomDate(-7),
+    tier: 2,
+    roles: ["Systems Engineer", "Associate"],
+    min_cgpa: 6.0,
+    package_range: "6-12 LPA",
+    eligible_branches: ["CSE", "IT", "ECE", "AI-ML"],
+    positions: 30,
+  },
+];
+
 // ─── Referrals ────────────────────────────────────────────────────────────────
 
 const REFERRERS = [
@@ -578,7 +982,7 @@ export const mockReferrals: Referral[] = Array.from({ length: 50 }, (_, i) => {
     student_name: student.name,
     referrer: pick(REFERRERS),
     company: pick(mockCompanies).name,
-    date: randomDate(90),
+    date: randomDate(rand(1, 90)),
     status: pick(["pending", "accepted", "rejected"] as Referral["status"][]),
   };
 });
@@ -647,7 +1051,6 @@ export function getDeptStats(): DeptStats[] {
       ? students.reduce((a, s) => a + s.programming_score, 0) / students.length
       : 0;
 
-    // Top company from placed students
     const companyCounts: Record<string, number> = {};
     for (const s of placed) {
       if (s.placed_at)
@@ -656,7 +1059,6 @@ export function getDeptStats(): DeptStats[] {
     const topCompany =
       Object.entries(companyCounts).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "-";
 
-    // Top skills
     const skillCounts: Record<string, number> = {};
     for (const s of placed) {
       for (const sk of s.skills) {
@@ -745,7 +1147,6 @@ export function getTopCompanies(n = 10) {
 }
 
 export function getSkillGapData(): SkillGap[] {
-  // Skills companies require (from job postings)
   const demandCounts: Record<string, number> = {};
   for (const jp of mockJobPostings) {
     for (const sk of jp.skills_required) {
@@ -753,7 +1154,6 @@ export function getSkillGapData(): SkillGap[] {
     }
   }
 
-  // Skills students have
   const supplyCounts: Record<string, number> = {};
   for (const s of mockStudents) {
     for (const sk of s.skills) {
@@ -875,6 +1275,53 @@ export function getPackageDistribution(): PackageDistribution[] {
   }));
 }
 
+// ─── Auth Helpers ─────────────────────────────────────────────────────────────
+
+export const MOCK_ADMIN_USERS = [
+  {
+    id: "ADMIN001",
+    email: "admin@nexus.edu",
+    name: "Dr. Placement Admin",
+    role: "admin" as const,
+  },
+  {
+    id: "ADMIN002",
+    email: "placement@nexus.edu",
+    name: "Prof. Anand Kumar",
+    role: "admin" as const,
+  },
+  {
+    id: "ADMIN003",
+    email: "coordinator@nexus.edu",
+    name: "Dr. Meera Singh",
+    role: "admin" as const,
+  },
+];
+
+export function getStudentByRollNumber(
+  rollNumber: string,
+): Student | undefined {
+  return mockStudents.find(
+    (s) =>
+      s.roll_number?.toLowerCase() === rollNumber.toLowerCase() ||
+      s.id.toLowerCase() === rollNumber.toLowerCase(),
+  );
+}
+
+export function updateStudentStatus(
+  id: string,
+  status: Student["placement_status"],
+  packageLPA?: number,
+): void {
+  const idx = mockStudents.findIndex((s) => s.id === id);
+  if (idx === -1) return;
+  mockStudents[idx] = {
+    ...mockStudents[idx],
+    placement_status: status,
+    package_lpa: packageLPA ?? mockStudents[idx].package_lpa,
+  };
+}
+
 export function getCGPAPlacementData() {
   const ranges = [
     { range: "<6", min: 0, max: 6 },
@@ -939,6 +1386,89 @@ export function getSectionStats(department: Department) {
       students,
     };
   });
+}
+
+// ─── Student-specific Helper Functions ────────────────────────────────────────
+
+export function getStudentApplications(studentId: string): Application[] {
+  return mockApplicationsAll.filter((a) => a.student_id === studentId);
+}
+
+export function getStudentInterviews(studentId: string): InterviewSession[] {
+  return mockInterviewSessions.filter((i) => i.student_id === studentId);
+}
+
+export function getUpcomingDrives(dept?: Department): UpcomingDrive[] {
+  if (!dept) return mockUpcomingDrives;
+  return mockUpcomingDrives.filter((d) => d.eligible_branches.includes(dept));
+}
+
+export function getPeerBenchmark(studentId: string): PeerBenchmark {
+  const student = mockStudents.find((s) => s.id === studentId);
+  if (!student) {
+    return {
+      student_cgpa: 0,
+      dept_avg_cgpa: 0,
+      dept_cgpa_percentile: 0,
+      student_aptitude: 0,
+      dept_avg_aptitude: 0,
+      dept_aptitude_percentile: 0,
+      student_programming: 0,
+      dept_avg_programming: 0,
+      dept_programming_percentile: 0,
+      dept_placement_rate: 0,
+      batch_size: 0,
+    };
+  }
+
+  const peers = mockStudents.filter(
+    (s) => s.department === student.department && s.id !== studentId,
+  );
+
+  const calcPercentile = (arr: number[], val: number) => {
+    if (!arr.length) return 50;
+    const below = arr.filter((v) => v < val).length;
+    return Number.parseFloat(((below / arr.length) * 100).toFixed(1));
+  };
+
+  const cgpas = peers.map((p) => p.cgpa);
+  const aptitudes = peers.map((p) => p.aptitude_score);
+  const programmings = peers.map((p) => p.programming_score);
+
+  const avg = (arr: number[]) =>
+    arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+
+  const placedPeers = peers.filter((p) => p.placement_status === "placed");
+  const packages = placedPeers
+    .filter((p) => p.package_lpa)
+    .map((p) => p.package_lpa!);
+
+  return {
+    student_cgpa: student.cgpa,
+    dept_avg_cgpa: Number.parseFloat(avg(cgpas).toFixed(2)),
+    dept_cgpa_percentile: calcPercentile(cgpas, student.cgpa),
+    student_aptitude: student.aptitude_score,
+    dept_avg_aptitude: Number.parseFloat(avg(aptitudes).toFixed(1)),
+    dept_aptitude_percentile: calcPercentile(aptitudes, student.aptitude_score),
+    student_programming: student.programming_score,
+    dept_avg_programming: Number.parseFloat(avg(programmings).toFixed(1)),
+    dept_programming_percentile: calcPercentile(
+      programmings,
+      student.programming_score,
+    ),
+    student_package: student.package_lpa,
+    dept_avg_package: packages.length
+      ? Number.parseFloat(avg(packages).toFixed(1))
+      : undefined,
+    dept_package_percentile:
+      student.package_lpa && packages.length
+        ? calcPercentile(packages, student.package_lpa)
+        : undefined,
+    dept_placement_rate: Number.parseFloat(
+      ((placedPeers.length / (peers.length || 1)) * 100).toFixed(1),
+    ),
+    batch_size: peers.length + 1,
+  };
 }
 
 export { DEPARTMENTS, SCHOOLS };

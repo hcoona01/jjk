@@ -1,31 +1,24 @@
 {
-  "overview": "Nexus is a full-featured placement management war room for college administrators. It provides real-time KPI tracking, deep analytics across departments and batches, failure analysis, mock interviews, and an AI-powered resume editor — all in a blue-themed, responsive dashboard.",
+  "overview": "Nexus is a full-featured placement management platform for students and admins. The student dashboard provides rich analytics, KPI cards with sparklines, placement trends, interview prep, skill gap analysis, company insights, and peer benchmarking — all with a blue OKLCH theme and smooth animations.",
   "features": [
-    "6 animated KPI cards with trend indicators and sparklines",
-    "Monthly placement trend charts with weekly/monthly/quarterly toggle",
-    "Department performance table with color-coded placement rates",
-    "Batch-wise analysis with department filter",
-    "Live activity feed with auto-refresh",
-    "Application pipeline funnel with conversion rates",
-    "Deep analytics with multi-select filters persisted in URL",
-    "Failure analysis and at-risk student prediction",
-    "Section-level drill-down to individual students",
-    "Company analytics with package distribution and drive calendar",
-    "Skill demand vs supply gap analysis",
-    "Top 10 student leaderboard with gold/silver/bronze badges",
-    "Mock interview simulator with question bank and scoring",
-    "Built-in resume editor with AI scanning and ATS score"
+    "Rich student dashboard with 6 animated KPI cards and sparklines",
+    "Placement trend and company tier accessibility charts",
+    "Applications hub with filterable table and status timeline",
+    "Interview prep with performance tracking and skill analysis",
+    "Analytics insights with peer comparison and skill gap heatmap",
+    "Sidebar with 6 nav sections linking to all student sub-routes",
+    "Blue OKLCH theme with Framer Motion animations",
+    "Admin dashboard with war-room analytics and placement management"
   ],
-  "category": "productivity",
+  "category": "education",
   "tags": [
     "placement",
-    "analytics",
     "dashboard",
+    "analytics",
+    "student",
     "education",
-    "admin",
-    "recruitment",
-    "resume",
-    "interview"
+    "react",
+    "typescript"
   ],
-  "last_updated": "2026-04-09T23:56:36.950Z"
+  "last_updated": "2026-04-10T01:43:22.589Z"
 }
