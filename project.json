@@ -1,0 +1,31 @@
+{
+  "overview": "Nexus is a full-featured placement management war room for college administrators. It provides real-time KPI tracking, deep analytics across departments and batches, failure analysis, mock interviews, and an AI-powered resume editor — all in a blue-themed, responsive dashboard.",
+  "features": [
+    "6 animated KPI cards with trend indicators and sparklines",
+    "Monthly placement trend charts with weekly/monthly/quarterly toggle",
+    "Department performance table with color-coded placement rates",
+    "Batch-wise analysis with department filter",
+    "Live activity feed with auto-refresh",
+    "Application pipeline funnel with conversion rates",
+    "Deep analytics with multi-select filters persisted in URL",
+    "Failure analysis and at-risk student prediction",
+    "Section-level drill-down to individual students",
+    "Company analytics with package distribution and drive calendar",
+    "Skill demand vs supply gap analysis",
+    "Top 10 student leaderboard with gold/silver/bronze badges",
+    "Mock interview simulator with question bank and scoring",
+    "Built-in resume editor with AI scanning and ATS score"
+  ],
+  "category": "productivity",
+  "tags": [
+    "placement",
+    "analytics",
+    "dashboard",
+    "education",
+    "admin",
+    "recruitment",
+    "resume",
+    "interview"
+  ],
+  "last_updated": "2026-04-09T23:56:36.950Z"
+}
